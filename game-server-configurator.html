@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/M0rdek4y/Desktop/Tutorial_Servidor_GameServer.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Server Configurator - Automated Setup Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection h3 {
+            background: #34495e;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .info-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: #fdf2e9;
+            border-left: 5px solid #e67e22;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .error-box {
+            background: #fdedec;
+            border-left: 5px solid #e74c3c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #eafaf1;
+            border-left: 5px solid #27ae60;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .ip-highlight {
+            background: #f1c40f;
+            color: #2c3e50;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .port-highlight {
+            background: #9b59b6;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .checklist h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .checklist ul {
+            list-style: none;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .checklist li:before {
+            content: "☐ ";
+            color: #3498db;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .final-ip {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .troubleshooting {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        ol, ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+        }
+            .download-section {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(39, 174, 96, 0.3);
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px;
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(52, 152, 219, 0.4);
+        }
+
+        .download-btn.primary {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .download-btn.primary:hover {
+            box-shadow: 0 12px 35px rgba(231, 76, 60, 0.4);
+        }
+        </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Tutorial Completo</h1>
+            <p>Configurando Servidor GameServer para Multiplayer</p>
+        </div>
+
+        
+        <div class="download-section">
+            <h2>🚀 Download da Ferramenta Automatizada</h2>
+            <p style="font-size: 1.1em; margin: 20px 0;">Chega de configuração manual! Baixe nossa ferramenta com interface gráfica moderna que automatiza todo o processo.</p>
+            
+            <div style="margin: 30px 0;">
+                <a href="./GameServerConfiguradorFINAL_v2.exe" class="download-btn primary" download="GameServerConfigurator.exe">
+                    📥 Download Configurador (33KB)
+                </a>
+                <br>
+                <a href="#recursos" class="download-btn">
+                    ✨ Ver Recursos da Ferramenta
+                </a>
+            </div>
+            
+            <div style="background: rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <p><strong>✅ Interface Gráfica Moderna</strong> • <strong>🌐 Detecção Automática de IP</strong> • <strong>🔥 Configuração de Firewall</strong> • <strong>☁️ Migração para Nuvem</strong></p>
+            </div>
+        </div>
+
+        <div id="recursos" style="background: #f8f9fa; padding: 30px; border-radius: 12px; margin: 30px 0;">
+            <h3 style="text-align: center; color: #2c3e50; margin-bottom: 25px;">🛠️ Recursos da Ferramenta Automatizada</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h4 style="color: #27ae60;">🖥️ Interface Moderna</h4>
+                    <p>Tema escuro profissional com botões intuitivos. Não precisa mais digitar comandos!</p>
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h4 style="color: #3498db;">🌐 Detecção de IP</h4>
+                    <p>6 serviços diferentes para encontrar seu IP público automaticamente. Nunca falha!</p>
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h4 style="color: #e74c3c;">🔥 Firewall Automático</h4>
+                    <p>Configura o Windows Defender automaticamente. Sem comandos complicados!</p>
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h4 style="color: #9b59b6;">☁️ Migração Nuvem</h4>
+                    <p>Assistente para Oracle Cloud e Railway. Deploy profissional em poucos cliques!</p>
+                </div>
+            </div>
+        </div>
+            <div class="section">
+                <div class="section-title">📋 PARTE 1: Descobrindo Informações Essenciais</div>
+                
+                <div class="subsection">
+                    <h3>1.1 Descobrir seu IP Público</h3>
+                    <div class="info-box">
+                        <p><strong>O IP Público é o endereço que seus amigos precisam para se conectar!</strong></p>
+                    </div>
+                    <ol>
+                        <li>Abra o <strong>PowerShell</strong> como administrador</li>
+                        <li>Digite o comando abaixo e pressione Enter:</li>
+                    </ol>
+                    <div class="code-block">curl -4 ifconfig.me</div>
+                    <p><strong>Anote o resultado</strong> (exemplo: <span class="ip-highlight">179.214.12.123</span>) - este é seu IP público</p>
+                </div>
+
+                <div class="subsection">
+                    <h3>1.2 Descobrir seu IP Local</h3>
+                    <ol>
+                        <li>No PowerShell, digite:</li>
+                    </ol>
+                    <div class="code-block">ipconfig</div>
+                    <ol start="2">
+                        <li>Procure por "Adaptador Ethernet" ou "Wi-Fi"</li>
+                        <li><strong>Anote o "Endereço IPv4"</strong> (exemplo: <span class="ip-highlight">192.168.0.11</span>) - este é seu IP local</li>
+                    </ol>
+                </div>
+
+                <div class="subsection">
+                    <h3>1.3 Verificar se o Servidor está Rodando</h3>
+                    <ol>
+                        <li>No PowerShell, digite:</li>
+                    </ol>
+                    <div class="code-block">netstat -ano | findstr 14159</div>
+                    <div class="success-box">
+                        <p><strong>✅ Se aparecer algo como:</strong></p>
+                        <code>UDP    0.0.0.0:14159          *:*        4740</code>
+                        <p>O servidor está funcionando!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔥 PARTE 2: Configurando Windows Firewall</div>
+                
+                <div class="subsection">
+                    <h3>2.1 Abrindo o Windows Firewall</h3>
+                    <ol>
+                        <li>Pressione <strong>Windows + R</strong></li>
+                        <li>Digite: <code>wf.msc</code> e pressione Enter</li>
+                        <li>O "Firewall do Windows com Segurança Avançada" abrirá</li>
+                    </ol>
+                </div>
+
+                <div class="subsection">
+                    <h3>2.2 Criando Regra de Entrada para UDP</h3>
+                    <ol>
+                        <li>No painel esquerdo, clique em <strong>"Regras de Entrada"</strong></li>
+                        <li>No painel direito, clique em <strong>"Nova Regra..."</strong></li>
+                        <li><strong>Tipo de Regra</strong>: Selecione "Porta" → Avançar</li>
+                        <li><strong>Protocolo e Portas</strong>:
+                            <ul>
+                                <li>Selecione "UDP"</li>
+                                <li>Marque "Portas locais específicas"</li>
+                                <li>Digite: <span class="port-highlight">14159</span></li>
+                                <li>Clique em "Avançar"</li>
+                            </ul>
+                        </li>
+                        <li><strong>Ação</strong>: Selecione "Permitir a conexão" → Avançar</li>
+                        <li><strong>Perfil</strong>: Deixe todos marcados (Domínio, Privado, Público) → Avançar</li>
+                        <li><strong>Nome</strong>: Digite "GameServer Server UDP" → Concluir</li>
+                    </ol>
+                </div>
+
+                <div class="subsection">
+                    <h3>2.3 Criando Regra de Entrada para TCP</h3>
+                    <div class="warning-box">
+                        <p><strong>⚠️ Importante:</strong> Repita o processo acima, mas no passo 4, selecione <strong>"TCP"</strong> em vez de UDP e use o nome <strong>"GameServer Server TCP"</strong></p>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>2.4 Verificando as Regras</h3>
+                    <p>Na lista de "Regras de Entrada", procure por:</p>
+                    <div class="success-box">
+                        <p>✅ GameServer Server UDP (Habilitada)<br>
+                        ✅ GameServer Server TCP (Habilitada)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🌐 PARTE 3: Configurando Port Forwarding no Modem/Roteador</div>
+                
+                <div class="subsection">
+                    <h3>3.1 Acessando o Modem/Roteador</h3>
+                    <ol>
+                        <li>Abra um navegador web</li>
+                        <li>Digite um destes endereços:</li>
+                    </ol>
+                    <div class="code-block">
+192.168.0.1
+192.168.1.1
+10.0.0.1
+                    </div>
+                    <ol start="3">
+                        <li>Faça login (usuário/senha geralmente estão na etiqueta do modem)</li>
+                    </ol>
+                </div>
+
+                <div class="subsection">
+                    <h3>3.2 Encontrando a Seção de Port Forwarding</h3>
+                    <p>Procure por uma dessas opções no menu:</p>
+                    <ul>
+                        <li><strong>"Port Forwarding"</strong></li>
+                        <li><strong>"Redirecionamento de Porta"</strong></li>
+                        <li><strong>"Virtual Server"</strong></li>
+                        <li><strong>"Servidor Virtual"</strong></li>
+                        <li><strong>"NAT"</strong></li>
+                        <li><strong>"Firewall"</strong> → <strong>"Port Forwarding"</strong></li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <h3>3.3 Configuração de Port Forwarding</h3>
+                    
+                    <div class="info-box">
+                        <h4>Opção 1: Se o roteador suporta TCP/UDP juntos</h4>
+                        <table>
+                            <tbody><tr><th>Campo</th><th>Valor</th></tr>
+                            <tr><td><strong>Nome/Descrição</strong></td><td>GameServer Server</td></tr>
+                            <tr><td><strong>Porta Externa</strong></td><td>14159</td></tr>
+                            <tr><td><strong>Porta Interna</strong></td><td>14159</td></tr>
+                            <tr><td><strong>Protocolo</strong></td><td><strong>TCP/UDP</strong> ou <strong>Ambos</strong></td></tr>
+                            <tr><td><strong>IP de Destino</strong></td><td>192.168.0.11 (seu IP local)</td></tr>
+                            <tr><td><strong>Status</strong></td><td>Habilitado</td></tr>
+                        </tbody></table>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Opção 2: Se precisa configurar separadamente</h4>
+                        <p><strong>Regra 1 (UDP):</strong></p>
+                        <table>
+                            <tbody><tr><th>Campo</th><th>Valor</th></tr>
+                            <tr><td><strong>Nome</strong></td><td>GameServer UDP</td></tr>
+                            <tr><td><strong>Porta Externa</strong></td><td>14159</td></tr>
+                            <tr><td><strong>Porta Interna</strong></td><td>14159</td></tr>
+                            <tr><td><strong>Protocolo</strong></td><td>UDP</td></tr>
+                            <tr><td><strong>IP de Destino</strong></td><td>192.168.0.11</td></tr>
+                        </tbody></table>
+                        
+                        <p><strong>Regra 2 (TCP):</strong></p>
+                        <table>
+                            <tbody><tr><th>Campo</th><th>Valor</th></tr>
+                            <tr><td><strong>Nome</strong></td><td>GameServer TCP</td></tr>
+                            <tr><td><strong>Porta Externa</strong></td><td>14159</td></tr>
+                            <tr><td><strong>Porta Interna</strong></td><td>14159</td></tr>
+                            <tr><td><strong>Protocolo</strong></td><td>TCP</td></tr>
+                            <tr><td><strong>IP de Destino</strong></td><td>192.168.0.11</td></tr>
+                        </tbody></table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎯 PARTE 4: Entendendo os IPs (CRUCIAL!)</div>
+                
+                <div class="subsection">
+                    <h3>4.1 Tipos de IP</h3>
+                    
+                    <div class="error-box">
+                        <h4>❌ IP LOCAL (Privado) - NUNCA usar para amigos</h4>
+                        <ul>
+                            <li><strong>O que é:</strong> IP da sua máquina dentro da sua casa/rede</li>
+                            <li><strong>Formato:</strong> 192.168.x.x, 10.x.x.x, 172.16.x.x</li>
+                            <li><strong>Exemplo:</strong> <span class="ip-highlight">192.168.0.11</span></li>
+                            <li><strong>Uso:</strong> Apenas no port forwarding do roteador</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ IP PÚBLICO - O que você DEVE passar para amigos</h4>
+                        <ul>
+                            <li><strong>O que é:</strong> IP da sua conexão na internet</li>
+                            <li><strong>Formato:</strong> Qualquer número que não seja os privados</li>
+                            <li><strong>Exemplo:</strong> <span class="ip-highlight">179.214.12.123</span></li>
+                            <li><strong>Uso:</strong> Para seus amigos se conectarem</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>4.2 Como Montar o Endereço Final</h3>
+                    
+                    <div class="info-box">
+                        <h4>Fórmula:</h4>
+                        <div class="code-block">IP PÚBLICO + : + PORTA = ENDEREÇO PARA AMIGOS</div>
+                        
+                        <h4>Exemplo Prático:</h4>
+                        <ul>
+                            <li><strong>Seu IP público:</strong> <span class="ip-highlight">179.214.12.123</span></li>
+                            <li><strong>Porta do jogo:</strong> <span class="port-highlight">14159</span></li>
+                            <li><strong>Endereço final:</strong> <span class="ip-highlight">179.214.12.123:14159</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="final-ip">
+                        <h4>🎮 ENDEREÇO PARA SEUS AMIGOS:</h4>
+                        <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">179.214.12.123:14159</div>
+                        <p>Cole este endereço e envie para seus amigos!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🧪 PARTE 5: Testando a Configuração</div>
+                
+                <div class="subsection">
+                    <h3>5.1 Teste Local</h3>
+                    <div class="code-block">Test-NetConnection -ComputerName 192.168.0.11 -Port 14159</div>
+                    <p>Deve mostrar: <strong>TcpTestSucceeded : True</strong></p>
+                </div>
+
+                <div class="subsection">
+                    <h3>5.2 Teste Externo</h3>
+                    <ol>
+                        <li>Acesse: <strong>https://www.yougetsignal.com/tools/open-ports/</strong></li>
+                        <li>Digite seu IP público: <span class="ip-highlight">179.214.12.123</span></li>
+                        <li>Digite a porta: <span class="port-highlight">14159</span></li>
+                        <li>Clique em "Check"</li>
+                        <li>Deve mostrar: <strong>"Port 14159 is open"</strong></li>
+                    </ol>
+                </div>
+
+                <div class="subsection">
+                    <h3>5.3 Teste com Amigo</h3>
+                    <div class="success-box">
+                        <p>Peça para seu amigo tentar conectar usando:</p>
+                        <div class="code-block">179.214.12.123:14159</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔍 PARTE 6: Solucionando Problemas</div>
+                
+                <div class="troubleshooting">
+                    <h4>❌ Porta não está aberta externamente</h4>
+                    <p><strong>Possíveis causas:</strong></p>
+                    <ul>
+                        <li>Port forwarding mal configurado</li>
+                        <li>IP de destino errado</li>
+                        <li>Protocolo errado (só TCP quando precisa UDP)</li>
+                    </ul>
+                    <p><strong>Solução:</strong></p>
+                    <ul>
+                        <li>Verifique se o IP de destino é seu IP local correto</li>
+                        <li>Confirme que criou regras para TCP E UDP</li>
+                        <li>Reinicie o modem/roteador</li>
+                    </ul>
+                </div>
+
+                <div class="troubleshooting">
+                    <h4>❌ Amigo não consegue conectar</h4>
+                    <p><strong>Verifique:</strong></p>
+                    <ul>
+                        <li>Está usando o IP público correto (não o 192.168.x.x)</li>
+                        <li>Servidor GameServer está realmente rodando</li>
+                        <li>Firewall não está bloqueando</li>
+                    </ul>
+                </div>
+
+                <div class="troubleshooting">
+                    <h4>❌ IP Público mudou</h4>
+                    <p><strong>Problema:</strong> Seu provedor muda o IP público</p>
+                    <p><strong>Solução:</strong> Use um serviço de DNS dinâmico (como No-IP ou DynDNS)</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📝 RESUMO FINAL</div>
+                
+                <div class="checklist">
+                    <h4>✅ Checklist de Verificação:</h4>
+                    <ul>
+                        <li>IP público descoberto: 179.214.12.123</li>
+                        <li>IP local confirmado: 192.168.0.11</li>
+                        <li>Servidor GameServer rodando na porta 14159</li>
+                        <li>Firewall Windows: Regra UDP criada</li>
+                        <li>Firewall Windows: Regra TCP criada</li>
+                        <li>Port Forwarding: Regra UDP configurada</li>
+                        <li>Port Forwarding: Regra TCP configurada</li>
+                        <li>Teste externo: Porta aberta</li>
+                        <li>Amigos usando IP correto: 179.214.12.123:14159</li>
+                    </ul>
+                </div>
+
+                <div class="final-ip">
+                    <h4>🎯 IP FINAL PARA SEUS AMIGOS:</h4>
+                    <div style="font-size: 1.8em; font-weight: bold;">179.214.12.123:14159</div>
+                </div>
+
+                <div class="error-box">
+                    <h4>⚠️ Pontos Críticos:</h4>
+                    <ol>
+                        <li><strong>Sempre use o IP PÚBLICO</strong> (179.214.12.123), nunca o local (192.168.0.11)</li>
+                        <li><strong>Configure AMBOS</strong> TCP e UDP no port forwarding</li>
+                        <li><strong>IP de destino</strong> no roteador deve ser seu IP LOCAL (192.168.0.11)</li>
+                        <li><strong>Teste sempre</strong> antes de passar para os amigos</li>
+                    </ol>
+                </div>
+
+                <div class="success-box">
+                    <h4>💬 Mensagem para seus amigos:</h4>
+                    <div class="code-block">
+Pessoal, para conectar no meu servidor GameServer:
+
+1. Abram o jogo
+2. Multiplayer  
+3. Conectar por IP
+4. Colem este endereço: 179.214.12.123:14159
+5. Conectar
+
+Se não funcionar, me avisem!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🎮 Tutorial criado em 21 de outubro de 2025 | Servidor GameServer Multiplayer</p>
+            <p>Seguindo este tutorial passo a passo, seu servidor funcionará perfeitamente!</p>
+        </div>
+    </div>
+
+    <script>
+        // Adicionar funcionalidade de impressão
+        window.onload = function() {
+            // Criar botão de imprimir
+            const printBtn = document.createElement('button');
+            printBtn.innerHTML = '🖨️ Imprimir/Salvar PDF';
+            printBtn.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #e74c3c;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                z-index: 1000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            `;
+            printBtn.onclick = function() {
+                window.print();
+            };
+            document.body.appendChild(printBtn);
+        };
+    </script>
+
+<button style="position: fixed; top: 20px; right: 20px; background: rgb(231, 76, 60); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; z-index: 1000; box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;">🖨️ Imprimir/Salvar PDF</button></body></html>
+
+
+
